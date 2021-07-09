@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Avatar,
   Button,
@@ -8,20 +9,42 @@ import {
   Container,
 } from "@material-ui/core";
 import { GoogleLogin } from "react-google-login";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useDispatch } from "react-redux";
 import { Input } from "./Input";
+import { signin, signup } from "../../actions/auth";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 import Icon from "./Icon";
 
-export const Auth = () => {
-  const [showPassword, setShowPassword] = useState(true);
-  const [isSignup, setIsSignup] = useState(false);
-  const dispatch = useDispatch();
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
+export const Auth = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+
+  const handleShowPassword = () =>
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+
+  const handleSubmit = (e) => {
+    e.prevent.default();
+    if (isSignup) {
+      dispatch(signup(formData, window.location));
+    } else {
+      dispatch(signin(formData, window.location));
+    }
+    console.log(formData);
+  };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const switchMode = () => {
     setIsSignup((prevIsSignup) => !prevIsSignup);
@@ -44,9 +67,6 @@ export const Auth = () => {
     console.log("Sign in unsuccessful. Try again later.");
   };
 
-  const handleShowPassword = () =>
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={3}>
@@ -66,8 +86,8 @@ export const Auth = () => {
                   half
                 />
                 <Input
-                  name="firstName"
-                  label="First Name"
+                  name="lastName"
+                  label="Last Name"
                   handleChange={handleChange}
                   half
                 />
@@ -86,11 +106,19 @@ export const Auth = () => {
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
             />
+            {isSignup && (
+              <Input
+                name="confirmPassword"
+                label="Repeat Password"
+                handleChange={handleChange}
+                type="password"
+              />
+            )}
           </Grid>
           <Button
             type="submit"
             fullWidth
-            variant="container"
+            variant="contained"
             color="primary"
             className={classes.submit}
           >

@@ -9,7 +9,6 @@ export const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const location = useLocation();
 
   const logout = () => {
     dispatch({ type: "LOGOUT" });
