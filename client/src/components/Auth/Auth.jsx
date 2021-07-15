@@ -9,11 +9,12 @@ import {
   Container,
 } from "@material-ui/core";
 import { GoogleLogin } from "react-google-login";
-import { Input } from "./Input";
-import { signin, signup } from "../../actions/auth";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import useStyles from "./styles";
 import Icon from "./Icon";
+import { signin, signup } from "../../actions/auth";
+import { AUTH } from "../../constants/actionTypes";
+import useStyles from "./styles";
+import { Input } from "./Input";
 
 const initialState = {
   firstName: "",
@@ -55,7 +56,7 @@ export const Auth = () => {
     const result = response?.profileObj;
     const token = response?.tokenId;
     try {
-      dispatch({ type: "AUTH", data: { result, token } });
+      dispatch({ type: AUTH, data: { result, token } });
       window.location = "/";
     } catch (error) {
       console.log(error);

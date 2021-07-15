@@ -1,6 +1,6 @@
 import jwt, { decode } from "jsonwebtoken";
 
-//  ?. => optional chaining
+//  (?. => optional chaining)
 //  wants to like a post => click the like button
 //  auth middleware() //based on the conditions
 
